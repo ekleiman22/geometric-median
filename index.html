@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Point with extreme property</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: row;
+            height: 100vh; /* 100% viewport height */
+        }
+
+        #left-panel {
+            flex: 0 0 40%; 
+        }
+
+        #right-panel {
+            flex: 1; /* Take remaining height */
+            display: flex;
+            flex-direction:column;
+        }        
+    </style>
+    <script src="drawings.js"></script>
+    <script src="calc.js"></script>
+    <script src="MouseMoveHandler.js"></script>
+    <script>
+        var drawer = null;
+        var mh = null;
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+                setStartPosition();
+            }
+        }
+        function setStartPosition() {
+            let xCenter = 200;
+            let yCenter = 200;
+            let axeColor = "blue";
+            let pointRadius = 5;
+            let pointColor = "black";
+            let minimalDistancePointColor = "blue";
+            let minimalDistancePointRadius = 6;
+
+            let offset = 5;
+            mh = new MouseMoveHandler(pnlCanvas, offset);
+
+            drawer = new Drawings(xCenter, yCenter, axeColor,
+                pointRadius, pointColor,
+                minimalDistancePointColor, minimalDistancePointRadius,
+                pnlCanvas);
+            drawer.drawBorder();
+            drawer.drawAxes();
+        }
+        function Show() {
+            let n = parseInt(document.getElementById("inpPointsNumber").value);
+            let choice = getPointsChoice();
+            switch (choice) {
+                case "1":
+                    drawer.drawRandomPoints(n)
+                    break;
+                case "2":                    
+                    break;
+                default:
+            }
+            drawer.drawMedian();
+        }
+        function clearAll() {
+            drawer.clearAll();
+        }
+        function getPointsChoice() {
+            let choice =
+                document.querySelector('input[name="radPointsChoice"]:checked').value;
+            return choice;
+        }
+    </script>
+</head>
+<body>
+    <div id="left-panel" style="margin-left:100px">
+        <h3 style="text-align:left;">Point with extreme property</h3>
+        <canvas id="pnlCanvas" width="400" height="400"></canvas>
+    </div>
+    <div id="right-panel" style="font-size: smaller; text-align: left;width:200px">
+        <p>
+            Find a point on the plane the sum of distances from which to the given points is minimal
+            <br />
+            Найти точку на плоскости, сумма расстояний от которой до заданных точек минимальна
+        </p>
+        <div>
+            <fieldset style="width:450px;height:200px">
+                <legend>Options:</legend>
+                <fieldset>
+                    <legend> How to draw points:</legend>
+                    <input id="radRandomChoice" type="radio"
+                           name="radPointsChoice" value="1" checked />
+                    <label for="radRandomChoice">Random Choice</label>
+                    <input id="radMouseChoice" type="radio"
+                           name="radPointsChoice" value="2" />
+                    <label for="radMouseChoice">Mouse Choice</label>
+                    <!--<input id="radRegularChoice" type="radio"
+                   name="radPointsChoice" value="3" />
+            <label for="radMouseChoice">Regular Choice</label>-->
+                </fieldset>
+                <br />
+                Number of points:<input id="inpPointsNumber"
+                                        type="text" value="3" />
+
+            </fieldset>
+            <br />
+
+            <div>
+                <input id="btnShow" type="button" value="Show points"
+                       onclick="Show()" />
+                <input id="btnClear" type="button" value="Clear"
+                       onclick="clearAll()" />
+
+            </div>
+            <br />
+            <fieldset>
+                <legend>Basic Information:</legend>
+                The problem  is known as the geometric median problem or 
+                the Fermat–Weber problem. The geometric median is a point that minimizes 
+                the sum of distances to a given set of points.
+                There isn't a simple formula to compute 
+                the geometric median, especially for a large number of points.
+                However, there are algorithms to approximate it.
+                One common algorithm to find an approximate solution
+                is the <b>Weiszfeld's algorithm.</b> It's an iterative algorithm where you start with an initial guess for the geometric median and iteratively refine it until convergence.
+            </fieldset>
+
+        </div>
+    </div>
+    
+</body>
+</html>
